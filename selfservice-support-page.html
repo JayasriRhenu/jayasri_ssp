@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body{
+      overflow-x: auto;
+    }
+    .status {
+      width: 100%;
+      white-space: nowrap;
+      color: white;
+      height: 42px;
+      border: none;
+    }
+
+    tbody tr {
+      background-color: #8080802e;
+      border-top: 5px solid white;
+      border-bottom: 5px solid white;
+    }
+
+    thead {
+      border-bottom: 5px solid white;
+    }
+
+    tbody tr td {
+      text-align: center;
+    }
+
+    table td,
+    table th {
+      vertical-align: middle !important;
+    }
+
+    table td{
+      padding: 0.45rem !important;
+    }
+
+    #tableContent {
+      display: flex;
+      justify-content: center;
+      overflow-y: auto;
+    }
+
+    #login-container {
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 9%;
+      margin-bottom: 7%;
+    }
+
+    .user-tickets-table-button {
+      color: #000 !important;
+      background-color: #e1e3ff00 !important;
+      border: none;
+    }
+
+    #user-button{ 
+      color: blue;
+      cursor: pointer;
+    }
+
+    .popup {
+      display: block;
+      background: rgba(0, 0, 0, 0.3);
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      z-index: 1;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .popup-content {
+      width: 85%;
+  margin: 10% auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: auto; 
+  max-height: 100%; 
+  position: relative;
+    }
+
+    .modal-dialog {
+      max-width: none;
+    }
+
+    .col-md-6 {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
+
+    .desc {
+      flex: 1;
+      margin-left: 3%;
+      max-height: 6em;
+    }
+    .scrollable-text {
+  max-height: 6em;
+  overflow: auto;
+}
+
+@media (max-width: 768px) {
+  .popup-content {
+    width: 90%;
+  }
+}
+
+    .add-ticket-popup {
+      display: block;
+      background: rgba(0, 0, 0, 0.3);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      z-index: 1;
+    }
+
+    .addpopup-content {
+      width: 40%;
+      margin: 10% auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .modal-dialog {
+      max-width: none;
+    }
+
+    #modalheader {
+    display: flex;
+    margin-left: auto;
+    color: red;
+    background: none;
+    border: none;
+    height: 0px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-controls {
+      width: 200%;
+    }
+
+    #TicketSeverity .form-select {
+      width: 100%;
+      max-height: 50px;
+      overflow: auto;
+    }
+
+    #options{
+      width: 100%;
+      height: 40px;
+    }
+
+    .sticky-footer {
+  display: flex;
+  justify-content: flex-end;
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  z-index: 1;
+  margin-bottom: auto;
+}
+.btn-groups{
+      right: 20px;
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 3%;
+}
+
+    .btn {
+      margin-right: 10px;
+    }
+
+    .btn-groups .btn {
+      margin-left: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .addpopup-content {
+        width: 80%;
+      }
+    }
+
+
+    .btn-groups2 {
+      display: flex;
+      justify-content: flex-end;
+      bottom: 20px;
+      width: calc(100% - 40px);
+    }
+
+    #tooltip{
+    font-style: italic;
+    color: red;
+    background-color: none;
+    background-color: #f4f4f4;
+    border-radius: 137%;
+    width: 6%;
+    height: 25px;
+    padding: inherit;
+    }
+    .resolution-popup {
+  position: fixed;
+  top: 45%;
+  left:40%;
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  z-index: 1000;
+}
+
+.comment-input {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.submit-button, .close-button {
+  padding: 10px;
+  margin-right: 10px;
+}
+
+.cancel-option{
+background-color: red !important;
+color: white !important;
+}
+
+#sortSelect{
+  border-radius: 0;
+  border: 1px solid black;
+  background-color: #8080800d;
+}
+
+  </style>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-..."
+    crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+
+<body>
+  <div class="container" id="login-container">
+    <div class="row justify-content-center">
+      <div class="col-md-4">
+        <div class="card align-center">
+          <div class="card-header text-center"><strong>Login</strong></div>
+          <div class="card-body">
+            <form>
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Username" onkeydown="userLogin(event)">
+              </div>
+
+              <div class="form-group">
+                <label for="password">Password</label> 
+                <input type="password" class="form-control" id="password" placeholder="Password" onkeydown="userLogin(event)">
+              </div>
+
+              <div class="form-group text-center">
+                <button type="button" class="btn btn-dark" onclick="getUserDetails()">Login</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="Mainpage" style="display: none !important;" id="Mainpage">
+    <div id="user-details-container" style="display: flex; overflow-x:auto;margin-top: 1%;">
+      <!-- Display user details here -->
+    </div>
+    <div class="align" style="padding-top: 1rem !important;padding-bottom: 1rem !important; overflow-x: auto;">
+      <div class="mainContent" id="mainContent">
+        <form class="form-inline">
+          <input type="text" class="form-control mb-2 mr-sm-2 mr-5" id="ticketNumber"
+            placeholder="Enter case number..." style="height: 43px;" onkeydown="handleSearch(event)">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <button type="button" class="btn text-nowrap mb-2 mr-3 rounded-0"
+              style="background-color: #076080; color: white;" onclick="searchTicket()">Search</button>
+            <button type="button"
+              class="btn text-nowrap btn-light mb-2 mr-3 border border-dark rounded-0  d-sm-inline"
+              onclick="showAddTicketPopup()">+ New Ticket</button>
+              <div class="form-group mb-2 mr-3" style="margin-left: 4%;">
+                <label for="sortSelect" class="sr-only">Sort By</label>
+                <select class="form-control" id="sortSelect" onchange="handleSortChange(this.value)"  data-toggle="tooltip" data-placement="top"
+                title="Sort by Status">
+                <option value="All" selected>All</option>
+                <option value="Assigned">Assigned</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="Closed">Closed</option>
+                <option value="New">New</option>
+                <option value="Pending">Pending</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Resolved">Resolved</option>
+              </select>
+            </div>
+            <i style="margin-top: 2.5%;
+            font-size: larger;
+            margin-left: -3%;" class="fa-solid fa-filter"></i>
+            </div>
+            <div class="user-tickets" id="totalTicketsCount" style="display: flex;margin-left: auto;">
+            </div>
+          </form>
+        </div>
+      </div>
+    <div class="tableContent w-97" id="user-tickets-table" style="overflow-x:auto; margin-bottom: 4%;border: 1px solid black;">
+      <table class="table table-bordered text-center" style="width: 100%; vertical-align: middle;">
+        <thead class="bg-white text-center" style="border: 1px solid black;">
+          <tr>
+            <th scope="col" style="width: 8%;white-space: nowrap;">SL NO</th>
+            <th scope="col" style="width: 11%;white-space: nowrap;">Case Number</th>
+            <th scope="col" style="white-space: nowrap;">Case Title</th>
+            <th scope="col" style="width: 12%;white-space: nowrap;">Raised On</th>
+            <th scope="col" style="width: 12%;white-space: nowrap;">Assigned To</th>
+            <th scope="col" style="width: 12%;white-space: nowrap;">Status</th>
+          </tr>
+        </thead>
+        <tbody class="text-center t-scroll" style="text-align: center;">
+        </tbody>
+      </table>
+      <div  id="loadingSpinner" style="display: none;">
+        <i class="fa-solid fa-spinner" style="font-size: xxx-large;margin-left: 50%;"></i>
+      </div>
+      <div class="pageSize">
+        <label for="pageSize" id="pageId" style="margin-left: 1%;">Items per page:</label>
+  <select id="pageSize" onchange="updatePageSize()" style="height: 31px;padding: 0%;color: blue;">
+    <option value="10">10</option>
+    <option value="20">20</option>
+  </select>
+      </div>
+    </div>
+    <div class="displayPopup" style="overflow-x: auto; overflow-y: auto;">
+    <div class="popup modal" id="popup">
+      <div class="popup-content scrollable-container" style="margin-top: 1%;overflow-y: auto;">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="margin: 0; max-width: 100% !important;">
+          <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+              <b style="font-size: larger;">Case Details</b>
+              <button id="modalheader" onclick="hideAddTicketPopup()" data-toggle="tooltip" data-placement="top"
+              title="Close window">X</button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <p><strong style="margin-right: 4px;">Case Number:</strong> <span id="popupTicketNumber"></span></p>
+                  <p><strong style="margin-right: 4px;">Case Title:</strong> <span id="popupTicketName"></span></p>
+                  <p><strong style="margin-right: 4px;">Created on:</strong> <span id="popupCreated"></span></p>
+                  <p><strong style="margin-right: 4px;">Created By:</strong> <span id="popupCreatedName"></span></p>
+                </div>
+                <div class="col-md-6">                  
+                  <p><strong style="margin-right: 4px;">Status:</strong> <span id="popupStatus"></span></p>
+                  <p><strong style="margin-right: 4px;">Severity:</strong> <span id="popupSeverity"></span></p>
+                  <p><strong style="margin-right: 4px;">Attachments:</strong><span id="popupModifiedBy"></span></p>
+                  <p><strong style="margin-right: 8px;">SLA Expires on:</strong><span id="slaTime"></span></p>
+                </div>
+                <div class="col-md-12">
+                  <p><strong style="margin-right: 4px;">Description:</strong><span id="popupDescription"></span></p>
+                  <p><strong style="margin-right: 4px;">Resolution:</strong><span id="popupResolution"></span></p>
+                </div>
+              </div>
+    
+              <!-- Comments Table -->
+              <div id="commentsTableContainer" style="display: none;">
+              <table class="table table-bordered" style="margin-top: 2%;">
+                <thead style="text-align: center;">
+                  <tr>
+                    <th scope="col" style="width: 7%;">SL NO</th>
+                    <th scope="col" style="width: 11%;">Date</th>
+                    <th scope="col" style="width: 15%;">Assigned By</th>
+                    <th scope="col" style="white-space: nowrap;">Subject</th>
+                    <th scope="col">Comments</th>
+                    <th scope="col" style="width: 13%;">Documents</th>
+                  </tr>
+                </thead>
+                <tbody id="commentsTableBody">
+                  <!-- Comment rows will be dynamically added here -->
+                </tbody>
+              </table>
+              
+              <!-- Add Comments Textarea -->
+              <div class="row">
+                <div class="col-md-12">
+                  <p style="margin-top: 2%;"><strong>Add Comments:</strong></p>
+                  <label for="subject"><strong>Subject*</strong></label>
+                  <input type="text" class="form-control" id="addCommentsSubject" placeholder="Enter Subject here" style="margin-bottom: 1%;"/>
+                  <label for="comments"><strong>Comments*</strong></label>
+                  <textarea class="form-control" rows="3" id="addCommentsTextarea" placeholder="Add the comments here..." style="margin-bottom: 1%;"></textarea>
+                  <label for="file" ><strong>Add File</strong></label>
+                  <input class="form-control form-control-sm" name="files[]" multiple id="addFiles" type="file" style="height: auto;" data-toggle="tooltip" data-placement="top"
+                  title="
+File Formats supported: png, jpg, jpeg, gif, tiff, pdf, xls, xlsx, doc, docx, ppt, pptx, txt, html, json">
+                  <div id="selectedFile"></div> 
+                </div>
+                <div class="col-md-2" style="display: flex;">
+                  <button type="button" class="btn btn-light rounded-0 border-dark" onclick="sendComments()" style="margin-top: 5%;margin-bottom: 2%;">Send</button>
+                </div>
+              </div>
+            </div>
+    
+              <!-- Close Button -->
+              <div class="row">
+                <div class="col-md-12" id="popupButtons" style="text-align: right; margin-top: 15px;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="displayNewTicket" style="overflow-x: auto;">
+    <div class="add-ticket-popup modal" id="addTicketPopup">
+      <div class="addpopup-content">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content container-fluid">
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6" style="flex: 0 0 100%; max-width: 100%;">
+                  <div class="form-group">
+                    <label for="TicketTitle"><strong>Title*</strong></label>
+                    <input type="text" class="form-control" id="TicketTitle" placeholder="Title..." maxlength="50"/>
+                  </div>
+                  <div class="form-group">
+                    <label for="description"><strong>Description*</strong></label>
+                    <textarea class="form-control" id="description" rows="4" placeholder="Enter description..."></textarea>
+                  </div>
+                  <div class="form-group" style="margin-bottom: 2px;">
+                    <label for="TicketSeverity"><strong>Severity*</strong></label>
+                    <select id="TicketSeverity" class="form-select form-select-sm">
+                      <option value="choose" selected>Choose</option>
+                      <option value="S1">Severity 1</option>
+                      <option value="S2">Severity 2</option>
+                      <option value="S3">Severity 3</option>
+                      <option value="S4">Severity 4</option>
+                    </select>
+                    <span class="material-symbols-outlined" data-toggle="tooltip" data-placement="top"
+                    title="
+                    Severity 1 : System is down.
+Severity 2 :Product is working,functionality or workflow is broken
+Severity 3 :Product is functional,user is facing minor or intermittent product issue 
+Severity 4 :Product is functional with no apparent issues" style="font-size: medium;
+cursor: pointer;">help</span>
+                  </div>
+                  <div class="form-group" style="margin-top: 3%; margin-bottom: 2px;">
+                    <label for="TicketFile"><strong>Add Files</strong></label>
+                    <input class="form-control form-control-sm" name="files[]" multiple id="formFileSm" type="file" data-toggle="tooltip" data-placement="top" title=" 
+File Formats supported: png, jpg, jpeg, gif, tiff, pdf, xls, xlsx, doc, docx, ppt, pptx, txt, html, json" style="height: 37px;">
+                  </div>
+                  <div id="selectedFiles"></div>
+
+                  <div class="btn-groups">
+                    <button type="button"  id="submit" class="btn btn-light border-dark rounded-0" onclick="submitNewTicket()">Submit</button>
+                    <button type="button" class="btn btn-light border-dark rounded-0" onclick="hideAddTicketPopup()">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>   <div class="error-popup modal" id="errorPopup">
+    <div class="error-popup-content">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            <p>There was an error connecting to our servers.</p>
+            <p>Please login again and check. If the issue persists, please contact the administrator.</p>
+            <button type="button" class="btn btn-light border-dark rounded-0" style="margin-top: 2%;" onclick="hideErrorPopup()">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+
+let idleTime = 0;
+
+document.addEventListener('mousemove', function (event) {
+    idleTime = 0;
+});
+
+document.addEventListener('keydown', function (event) {
+    idleTime = 0;
+});
+
+function incrementIdleTime() {
+    idleTime++;
+    if (idleTime > 15) { 
+      logout();
+    }
+}
+
+
+
+setInterval(incrementIdleTime,60000);
+incrementIdleTime();
+
+const config = {
+    apiUrl: 'https://support.frothdesk.com/pool/public/api',
+    username: 'rbcrm_admin',
+    password: 'Zaq12wsx$',
+  };
+
+  let allselectedFilesArray = [];
+  let isLoggedIn = false;
+
+  function showLogin() {
+    document.getElementById('login-container').style.display = 'block';
+    document.getElementById('Mainpage').style.display = 'none';
+    isLoggedIn = false;
+    document.getElementById('sortSelect').value = 'All';
+  }
+
+  function showMainContent() {
+    document.getElementById('Mainpage').style.display = 'block';
+    document.getElementById('login-container').style.display = 'none';
+    document.getElementById('addTicketPopup').style.display = 'none';
+    document.getElementById('popup').style.display = 'none';
+    isLoggedIn = true;
+  
+  
+  }
+
+  async function logout() {
+    accessToken = null;
+    showLogin();
+  }
+
+  function showCommentsTable() {
+  document.getElementById('commentsBtn').disabled = true;
+  document.getElementById('commentsTableContainer').style.display = 'block';
+}
+
+function hideCommentsTable() {
+  document.getElementById('commentsBtn').disabled = false;
+  document.getElementById('commentsTableContainer').style.display = 'none';
+}
+
+  let accessToken;
+  let Id;
+  let userData;
+  let mainStatus;
+  let totalTickets=0;
+  let openTickets=0;
+  let ticketId;
+  let ticketNumber;
+  let TicketData;
+  let enteredTicketNumber;
+  let currentPageSize = 10;
+  let currentDropdown;
+  let selectedOption;
+  let commentInput;
+  let statusCaseNo;
+  let subjectS;
+  let selectedValue = 'All';
+
+  async function getToken() {
+    const response = await fetch(config.apiUrl+'/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        'user_name': config.username,
+        'password': config.password,
+      }).toString(),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      accessToken = data.access_token;
+    } else {
+      alert('Try again!')
+    }
+  }
+
+
+function handleSearch(event) {
+     if (event.keyCode === 13) {
+      event.preventDefault();
+      searchTicket();
+    }
+  }
+
+function userLogin(event){
+  if (event.keyCode === 13){
+    event.preventDefault();
+    getUserDetails();
+  }
+}
+
+
+  async function getUserDetails() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    if (!username || !password) {
+    alert('Please enter both username and password.');
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    return;
+  }
+  
+    await getToken();
+    const response = await fetch(config.apiUrl+'/customerLogin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        'customer_name': username,
+        'customer_password': password    
+        }),
+    });
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    userData = await response.json();
+    if (response.status === 200) {
+      showMainContent();
+      Id = userData.id;
+      fetchUserTickets();
+      displayUserDetails();
+    } else {
+      alert('Enter valid login credentials!')
+    }
+  }
+
+  async function fetchUserTickets() {
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    loadingSpinner.style.display = 'block';
+   const response = await fetch(config.apiUrl+`/fetchUserTickets/${Id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`,
+    },
+  });
+
+  userTicketData = await response.json();
+  if(response.status === 200){
+  loadingSpinner.style.display = 'none';
+  totalTickets = userTicketData.length;
+  openTickets = userTicketData.reduce((count, ticket) => {
+    if (ticket.status.toLowerCase().startsWith('open')) {
+      return count + 1;
+    }
+    return count;
+  }, 0);
+  displayUserTicketsTable(1,10);
+}
+else{
+  showErrorPopup();
+}
+} 
+
+async function displayUserTicketsTable(pageNumber, pageSize, filteredData) {
+  let userDataTable = filteredData ? filteredData.slice() : userTicketData.slice();
+
+  const userTicketTable = document.getElementById('user-tickets-table');
+  const tbody = userTicketTable.querySelector('tbody');
+  const paginationDiv = userTicketTable.querySelector('.pagination');
+  if (paginationDiv) {
+    paginationDiv.remove();
+  }
+
+  tbody.innerHTML = '';
+  if (userDataTable && userTicketTable && tbody) {
+    userDataTable.sort((a, b) => {
+      const dateA = new Date(a.date_entered);
+      const dateB = new Date(b.date_entered);
+      return dateB - dateA;
+    });
+
+    const startIndex = (pageNumber - 1) * pageSize;
+    const endIndex = Math.min(startIndex + pageSize, userDataTable.length);
+    const paginatedData = userDataTable.slice(startIndex, endIndex);
+    console.log(startIndex,endIndex,paginatedData);
+
+    let serialNumber = startIndex + 1;
+    paginatedData.forEach((ticket, index) => {
+      const caseNumber = ticket.case_number;
+      const statusParts = ticket.status.split('_');
+      const mainStatus = statusParts[1];
+      const statusButton = document.createElement('button');
+      statusButton.id = 'statusButton';
+      statusButton.className = 'status';
+      statusButton.textContent = mainStatus;
+      statusButton.style.width = '100% !important';
+      statusButton.style.cursor = 'default';
+      statusButton.disabled = true;
+
+      switch (mainStatus) {
+        case 'New':
+        case 'Open':
+          statusButton.style.backgroundColor = 'rgb(126 82 227 / 67%)';
+          break;
+        case 'Pending':
+        case 'Rejected':
+        case 'Cancelled':
+          statusButton.style.backgroundColor = 'rgb(191 82 82 / 82%)';
+          break;
+        case 'Resolved':
+        case 'Closed':
+          statusButton.style.backgroundColor = 'rgb(91 182 110 / 65%)';
+          break;
+        default:
+          statusButton.style.backgroundColor = 'rgb(35 59 213)';
+      }
+      const dateTimeString = ticket.date_entered;
+      const datePart = dateTimeString.split(' ')[0];
+      const newRow = `<tr style="margin-top: 3px; margin-bottom: 3px;">
+        <td>${serialNumber++}</td>
+        <td><a id="user-button" onclick="showPopup(${caseNumber})">${caseNumber}</a></td>
+        <td>${ticket.name}</td>
+        <td>${datePart}</td>
+        <td>${ticket.created_by}</td>
+        <td></td>
+        </tr>`;
+      const row = tbody.insertRow();
+      row.innerHTML = newRow;
+      row.cells[5].appendChild(statusButton);
+    });
+
+    const totalPages = Math.ceil(userDataTable.length / pageSize);
+
+    const paginationUl = document.createElement('ul');
+    paginationUl.className = 'pagination';
+
+    const previousLi = document.createElement('li');
+    previousLi.className = 'page-item';
+    const previousButton = document.createElement('button');
+    previousButton.className = 'page-link';
+    previousButton.innerHTML = '&laquo;';
+    previousButton.addEventListener('click', () => {
+      const previousPage = pageNumber - 1;
+      if (previousPage > 0) {
+        displayUserTicketsTable(previousPage, pageSize,filteredData);
+      }
+    });
+    previousLi.appendChild(previousButton);
+    paginationUl.appendChild(previousLi);
+
+    if (pageNumber > 3) {
+      const startEllipsisLi = document.createElement('li');
+      startEllipsisLi.className = 'page-item disabled';
+      const startEllipsisButton = document.createElement('button');
+      startEllipsisButton.className = 'page-link';
+      startEllipsisButton.innerHTML = '...';
+      startEllipsisLi.appendChild(startEllipsisButton);
+      paginationUl.appendChild(startEllipsisLi);
+    }
+
+    for (let i = Math.max(1, pageNumber - 1); i <= Math.min(totalPages, pageNumber + 1); i++) {
+      const pageLi = document.createElement('li');
+      pageLi.className = 'page-item';
+
+      const pageButton = document.createElement('button');
+      pageButton.className = 'page-link';
+      pageButton.textContent = i;
+
+      if (i === pageNumber) {
+        pageLi.classList.add('active');
+      }
+
+      pageButton.addEventListener('click', () => displayUserTicketsTable(i, pageSize,filteredData));
+
+      pageLi.appendChild(pageButton);
+      paginationUl.appendChild(pageLi);
+    }
+
+    if (pageNumber < totalPages - 2) {
+      const endEllipsisLi = document.createElement('li');
+      endEllipsisLi.className = 'page-item disabled';
+      const endEllipsisButton = document.createElement('button');
+      endEllipsisButton.className = 'page-link';
+      endEllipsisButton.innerHTML = '...';
+      endEllipsisLi.appendChild(endEllipsisButton);
+      paginationUl.appendChild(endEllipsisLi);
+    }
+
+    const nextLi = document.createElement('li');
+    nextLi.className = 'page-item';
+    const nextButton = document.createElement('button');
+    nextButton.className = 'page-link';
+    nextButton.innerHTML = '&raquo;';
+    nextButton.addEventListener('click', () => {
+      const nextPage = pageNumber + 1;
+      const lastPage = Math.ceil(userDataTable.length / pageSize);
+
+      if (nextPage <= lastPage) {
+        displayUserTicketsTable(nextPage, pageSize,filteredData);
+      }
+    });
+    nextLi.appendChild(nextButton);
+    paginationUl.appendChild(nextLi);
+
+    paginationUl.classList.add('justify-content-end');
+    paginationUl.style.marginTop = '-3.4%';
+    paginationUl.style.marginRight = '1%';
+    userTicketTable.appendChild(paginationUl);
+  } else {
+    userTicketTable.innerHTML = '<p>User data not available</p>';
+  }
+  displayUserDetails();
+}
+
+
+
+let filteredData;
+
+function handleSortChange(selectedValue) {
+  if (selectedValue === 'All') {
+    filteredData = userTicketData;
+  } else {
+    filteredData = userTicketData.filter((ticket) => {
+      const statusParts = ticket.status.split('_');
+      const mainStatus = statusParts.length > 1 ? statusParts[1] : ticket.status;
+      return mainStatus === selectedValue;
+    });
+  }
+  
+  const userTicketTable = document.getElementById('user-tickets-table');
+  const tbody = userTicketTable.querySelector('tbody');
+  const pageSizeDropdown = document.getElementById('pageSize');
+  const pageSizeId = document.getElementById('pageId');
+  if (filteredData.length > 0) {
+    displayUserTicketsTable(1, currentPageSize, filteredData);
+    pageSizeDropdown.style.display = 'inline-block';
+    pageSizeId.style.display = 'inline-block';
+  } else {
+    tbody.innerHTML = `<p style="margin-left: 342%; margin-top: 10%;">No data available!</p>`;
+    tbody.style.whiteSpace = 'nowrap';
+    pageSizeDropdown.style.display = 'none';
+    pageSizeId.style.display = 'none';
+    const paginationDiv = userTicketTable.querySelector('.pagination');
+    if (paginationDiv) {
+      paginationDiv.remove();
+    }
+  }
+}
+
+function updatePageSize() {
+  const pageSizeDropdown = document.getElementById('pageSize');
+  currentPageSize = parseInt(pageSizeDropdown.value);
+  displayUserTicketsTable(1, currentPageSize,filteredData);
+}
+
+async function displayUserDetails() {
+  const userDetailsContainer = document.getElementById('user-details-container');
+  const userTickets = document.getElementById('totalTicketsCount');
+  if (userData) {
+    const name = userData.customer_name;
+    const email = userData.email;
+
+    userDetailsContainer.innerHTML = `
+      <p class="user-details" style="margin-right:20px;"><strong style="margin-right:10px">Name:</strong>${name}</p>
+      <p class="user-details" style="margin-right:20px;"><strong style="margin-right:10px">Email:</strong>${email}</p>
+      <button class="btn user-details" style="margin-left:auto !important;height:37px;border:1px solid;border-radius:0%;background-color:white;" onclick="logout()">Logout</button>      
+      `;
+      // <i class="fa-solid fa-right-from-bracket" onclick="logout()" onmouseover="showLogoutText()" onmouseout="hideLogoutText()" style="margin-left:auto;"></i>
+
+    userTickets.innerHTML = `
+    <p class="user-details-total" style="margin-right:20px;margin-left:auto;"><strong style="margin-right:10px;white-space:nowrap;">Total Tickets:</strong>${totalTickets}</p>
+    <p class="user-details-open" style="margin-right:20px;"><strong style="margin-right:10px;white-space:nowrap;">Open Tickets:</strong>${openTickets}</p>
+    `;
+  } else {
+    userDetailsContainer.innerHTML = '<p>User data not available</p>';
+  }
+}
+
+function showLogoutText() {
+    const logoutIcon = document.querySelector('.fa-solid.fa-right-from-bracket');
+    logoutIcon.title = 'Logout';
+}
+
+function hideLogoutText() {
+    const logoutIcon = document.querySelector('.fa-solid.fa-right-from-bracket');
+    logoutIcon.title = '';
+}
+
+function showErrorPopup() {
+  const errorPopup = document.getElementById('errorPopup');
+  errorPopup.style.display = 'flex !important';
+  errorPopup.style.alignItems = 'center';
+  errorPopup.style.justifyContent = 'center';
+  errorPopup.style.background = '#f0f8ff9e';
+}
+
+function hideErrorPopup() {
+  const errorPopup = document.getElementById('errorPopup');
+  errorPopup.style.display = 'none';
+  logout();
+}
+
+function showAddCommentsPopup() {
+    document.getElementById('addCommentsPopup').style.display = 'flex';
+    document.getElementById('addCommentsPopup').style.alignItems = 'center';
+    document.getElementById('addCommentsPopup').style.justifyContent = 'center';
+}
+
+function hideAddCommentsPopup() {
+    document.getElementById('addCommentsPopup').style.display = 'none';
+    document.getElementById('commentsTextArea').value = '';
+}
+
+async function submitComments() {
+    const commentsText = document.getElementById('commentsTextArea').value;
+
+    if (!commentsText) {
+        alert('Please enter comments before submitting.');
+        return;
+    }
+
+    document.getElementById('commentsTextArea').value = '';
+    hideAddCommentsPopup();
+}
+
+async function showPopup(caseNumber) {
+  const index = userTicketData.findIndex(ticket => ticket.case_number === caseNumber);
+
+  if (index !== -1) {
+    const ticket = userTicketData[index];
+    ticketId = ticket.id;
+    ticketNumber = ticket.case_number;
+
+    const response = await fetch(config.apiUrl + `/fetchTicketDetails/${ticketId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    TicketData = await response.json();
+    document.getElementById('popup').style.display = 'flex';
+    document.getElementById('popup').style.alignItems = 'center';
+    document.getElementById('popup').style.justifyContent = 'center';
+
+    const statusParts = TicketData.status.split('_');
+    const mainStatus = statusParts[1];
+    const dateTimeString = TicketData.date_modified;
+    const datePart = dateTimeString.split(' ')[0];
+    const documentNames = TicketData.documents.map(document => document.document_name).join(', ');
+    const documentUrl = TicketData.documents.map(documentUrl => documentUrl.download_url);
+
+    document.getElementById('popupTicketNumber').innerText = TicketData.case_number;
+    document.getElementById('popupTicketName').innerText = TicketData.name || '-';
+    document.getElementById('popupDescription').innerText = TicketData.description || '-';
+    document.getElementById('popupStatus').innerText = mainStatus || '-';
+    document.getElementById('popupCreated').innerText = TicketData.date_entered || '-';
+    document.getElementById('popupModifiedBy').innerHTML = `<a href='${documentUrl}' target='_parent' id="docUrl" style='color:black !important'>${documentNames || '-'}<a>`;
+    document.getElementById('slaTime').innerText = TicketData.resolution_target_time || '-';
+    document.getElementById('popupResolution').innerText = TicketData.resolution || '-';
+    document.getElementById('popupSeverity').innerText = TicketData.severity || '-';
+    document.getElementById('popupCreatedName').innerText = TicketData.created_by || '-';
+
+    // Add appropriate buttons based on the status
+    const buttonsContainer = document.getElementById('popupButtons');
+    buttonsContainer.innerHTML = '';
+
+    if (mainStatus === 'Resolved') {
+      const commentsTableHide = document.getElementById('commentsTableContainer');
+      commentsTableHide.style.display = 'none';
+      const reopenButton = document.createElement('button');
+      reopenButton.className = 'btn btn-light';
+      reopenButton.innerText = 'Reject';
+      reopenButton.addEventListener('click', () => {
+        let statusApi = 'Open_Assigned';
+        updateStatus(ticketId,statusApi);
+        document.getElementById('popup').style.display = 'none';
+      });
+      buttonsContainer.appendChild(reopenButton);
+      const closeButton = document.createElement('button');
+      closeButton.className = 'btn btn-light';
+      closeButton.innerText = 'Close';
+      closeButton.addEventListener('click', () => {
+        let statusApi = 'Closed_Closed';
+        updateStatus(ticketId,statusApi);
+        document.getElementById('popup').style.display = 'none';
+      });
+      buttonsContainer.appendChild(closeButton);
+    } else if(mainStatus === 'Closed'){
+      const commentsTableHide = document.getElementById('commentsTableContainer');
+      commentsTableHide.style.display = 'none';
+      const closedButton = document.createElement('button');
+      closedButton.className = 'btn btn-light';
+      closedButton.innerText = 'Close';
+      closedButton.addEventListener('click', () => {
+        document.getElementById('popup').style.display = 'none';
+      });
+      buttonsContainer.appendChild(closedButton);
+    }
+    else {
+      const commentsButton = document.createElement('button');
+      commentsButton.className = 'btn btn-light';
+      commentsButton.id  = 'commentsBtn';
+      commentsButton.innerText = 'Comments';
+      commentsButton.addEventListener('click', () => {
+        showCommentsTable();
+      });
+      buttonsContainer.appendChild(commentsButton);
+      // const closeCButton = document.createElement('button');
+      // closeCButton.className = 'btn btn-light';
+      // closeCButton.innerText = 'Close';
+      // closeCButton.addEventListener('click', () => {
+      //   hideAddTicketPopup();
+      //   document.getElementById('popup').style.display = 'none';
+      // });
+      // buttonsContainer.appendChild(closeCButton);
+    }
+
+    addComments();
+    document.getElementById('popup').style.display = 'block';
+  } else {
+    console.error(`Ticket not found for case number: ${caseNumber}`);
+  }
+}
+
+function openDocumentUrl(url) {
+  window.open(url, '_blank');
+}
+
+
+
+async function updateStatus(ticketId,statusApi){
+  const payload = {
+      ticket_id: ticketId,
+      status: statusApi,
+    };
+
+    const response = await fetch(config.apiUrl + '/updateTicket', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(payload),
+    });
+    if (response.ok) {
+      if(statusApi === 'Closed_Rejected'){
+        alert('Ticket Rejected Successfully');
+      }else{
+        alert('Ticket Closed successfully');
+      }
+    displayUserTicketsTable(1,currentPageSize);
+    fetchUserTickets();
+      } else {
+      alert('Failed to submit');
+    }  
+}
+
+
+function addComments(){ 
+  const commentsTableBody = document.getElementById('commentsTableBody');
+  commentsTableBody.innerHTML = '';
+  let serialNumber = 1; 
+  if(TicketData && commentsTableBody && TicketData.notes && TicketData.notes.length > 0){
+    TicketData.notes.forEach((comment) => {
+      const row = commentsTableBody.insertRow();
+      let dateTimeString = comment.date_entered;
+      let date = dateTimeString.split(' ')[0];
+      row.insertCell(0).textContent = serialNumber++;
+      row.insertCell(1).textContent = date;
+      row.insertCell(2).textContent = comment.created_by;
+      row.insertCell(3).textContent = comment.name;
+      row.insertCell(4).textContent = comment.description;
+      row.insertCell(5).innerHTML =`<a href="${comment.download_url}" target="_parent" style="color: black !important">${comment.filename || '-'}</a>`;
+  });
+  }else{
+        commentsTableBody.innerHTML = '<tr><td colspan="6">No comments added</td></tr>';
+  }
+}
+
+  function hidePopup() {
+    document.getElementById('popup').style.display = 'none';
+  }
+
+  function showAddTicketPopup() {
+    document.getElementById('addTicketPopup').style.display = 'flex';
+    document.getElementById('addTicketPopup').style.alignItems = 'center';
+    document.getElementById('addTicketPopup').style.justifyContent = 'center';
+    isLoggedIn = true;
+  }
+
+  function hideAddTicketPopup() {
+    document.getElementById('popup').style.display = 'none';
+    document.getElementById('TicketTitle').value = '';
+    document.getElementById('description').value = '';
+    document.getElementById('formFileSm').value ='';
+    document.getElementById('addFiles').value = '';
+    document.getElementById('TicketSeverity').value = "choose";
+    document.getElementById('addTicketPopup').style.display = 'none';
+    selectedFilesArray = [];
+    let fileInput = document.getElementById("formFileSm");
+    fileInput.value = '';
+   let selectedFilesContainer = document.getElementById("selectedFiles");
+   selectedFilesContainer.innerHTML = "";
+   let fileInputs = document.getElementById("addFiles");
+   fileInputs.value = '';
+   let selectedFilesContainers = document.getElementById("selectedFile");
+   selectedFilesContainers.innerHTML = '';
+    hideCommentsTable();
+    let selectedFileContainer = document.getElementById("selectedFile");
+  selectedFileContainer.innerHTML = '';
+    let hide = document.getElementById('commentsTableContainer');
+    hide.style.display = 'none';
+    document.getElementById('submit').disabled = false;
+  
+  }
+
+async function sendComments() {
+  document.getElementById('commentsBtn').disabled = true;
+  const addCommentsSubject = document.getElementById('addCommentsSubject').value;
+  const addCommentsTextarea = document.getElementById('addCommentsTextarea').value;
+  const addFilesInput = document.getElementById('addFiles');
+
+  if (!addCommentsSubject || !addCommentsTextarea) {
+      alert('Please enter both subject & comments before sending.');
+           return;
+    }
+
+  const selectedFile = addFilesInput.files.length > 0 ? addFilesInput.files[0] : null;
+  const formData = new FormData();
+  formData.append('ticket_id', ticketId);
+  formData.append('subject', addCommentsSubject);
+  formData.append('description', addCommentsTextarea);
+  if (selectedFile) {
+    formData.append('attachment', selectedFile);
+  }
+
+    const response = await fetch(config.apiUrl + '/createNote', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`, 
+      },
+      body: formData,
+    });
+
+    if (response.ok) {
+      alert('Comments submitted successfully!');
+      showPopup(ticketNumber);
+      document.getElementById('addCommentsSubject').value = '';
+      document.getElementById('addCommentsTextarea').value = '';
+      addFilesInput.value = '';
+    } else {
+      showErrorPopup();
+    }
+}
+
+
+async function searchTicket() {
+    enteredTicketNumber = document.getElementById('ticketNumber').value;
+
+    if (userTicketData) {
+      const searchTicket = userTicketData.find(ticket => {
+        return String(ticket.case_number) === enteredTicketNumber.trim();
+      });
+
+      if (searchTicket) {
+        const index = searchTicket.case_number;
+        document.getElementById('ticketNumber').value = '';
+        showPopup(index);
+      } else {
+        alert(`Ticket not found.`);
+      }
+    } else {
+      console.error('No user ticket data available');
+    }
+
+    document.getElementById('ticketNumber').value = '';
+  }
+
+
+  async function submitNewTicket() {
+  const title = document.getElementById('TicketTitle').value;
+  const description = document.getElementById('description').value;
+  const severitySelect = document.getElementById('TicketSeverity');
+  const severity = severitySelect.options[severitySelect.selectedIndex].value;
+  const fileInput = document.getElementById('formFileSm');
+  const Title = document.getElementById("TicketTitle").value.trim(); // Trim removes whitespace from both ends
+  const Description = document.getElementById("description").value.trim();
+
+  if (Title === "" || Description === "") {
+    alert("Please provide both the title and description before clicking Submit");
+    return; 
+  }
+  
+  if (!title || !description) {
+    alert('Please provide both the title and description before clicking Submit');
+    document.getElementById('submit').disabled = false;    
+    return;
+  }
+  
+  if (severity === 'choose') {
+    alert('Please select a valid severity');
+    document.getElementById('submit').disabled = false;    
+    return;
+  }
+
+  const selectedFile = fileInput.files.length > 0 ? fileInput.files[0] : null;
+
+  const data = new FormData();
+  data.append('account_id', Id);
+  data.append('name', title);
+  data.append('severity', severity);
+  data.append('description', description);
+
+  if (selectedFile) {
+    data.append('attachment', selectedFile);
+  }
+
+  const response = await fetch(config.apiUrl + '/createTicket', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+    },
+    body: data,
+  });
+
+  document.getElementById('addTicketPopup').style.display = 'none';
+  if (response.status === 200) {
+    const newTicketData = await response.json();
+    
+    // Add the new ticket to the beginning of the array
+    userTicketData.reverse();
+
+    await fetchUserTickets();
+    const newIndex = userTicketData.length - 1;
+    document.getElementById('submit').disabled = false;
+    attachedAll =[];
+    alert('Ticket submitted successfully.');
+    hideAddTicketPopup();
+  } else {
+    const errorData = await response.json();
+    document.getElementById('submit').disabled = false;
+    showErrorPopup();
+  }
+}
+
+async function addTicketToTable(ticketData) {
+  const userTicketTable = document.getElementById('user-tickets-table');
+  const tbody = userTicketTable.querySelector('tbody');
+
+  const newRow = tbody.insertRow();
+  const serialNumber = tbody.rows.length;
+
+  const statusParts = ticketData.status.split('_');
+  const mainStatus = statusParts[1];
+
+  const statusButton = document.createElement('button');
+  statusButton.className = 'status';
+  statusButton.textContent = mainStatus;
+  statusButton.style.width = '100% !important';
+
+  // Set background color based on status
+  switch (mainStatus) {
+    case 'New':
+    case 'Open':
+      statusButton.style.backgroundColor = 'rgb(126 82 227 / 67%)';
+      break;
+    case 'Pending':
+    case 'Cancelled':
+      statusButton.style.backgroundColor = 'rgb(191 82 82 / 82%)';
+      break;
+    case 'Resolved':
+    case 'Closed':
+      statusButton.style.backgroundColor = 'rgb(91 182 110 / 65%)';
+      break;
+    default:
+      statusButton.style.backgroundColor = '#23272b';
+  }
+
+  newRow.insertCell(0).textContent = serialNumber;
+  newRow.insertCell(1).innerHTML = `<a id="user-button" onclick="showPopup(${serialNumber - 1})">${ticketData.case_number}</a>`;
+  newRow.insertCell(2).textContent = ticketData.name;
+  newRow.insertCell(3).textContent = ticketData.date_entered;
+  newRow.insertCell(4).textContent = ticketData.created_by;
+  newRow.insertCell(5).appendChild(statusButton);
+
+  newRow.addEventListener('click', function () {
+    showPopup(serialNumber - 1);
+  });
+
+  newRow.setAttribute('data-info', JSON.stringify({ ...ticketData }));
+}
+
+function updatePopup() {
+  const latestTicket = userTicketData[userTicketData.length - 1]; 
+
+  document.getElementById('popupTicketNumber').innerText = latestTicket.case_number || '-';
+  document.getElementById('popupTicketName').innerText = latestTicket.name || '-';
+  document.getElementById('popupDescription').innerText = latestTicket.description || '-';
+  document.getElementById('popupStatus').innerText = latestTicket.status || '-';
+  document.getElementById('popupCreated').innerText = latestTicket.date_entered || '-';
+  document.getElementById('popupModified').innerText = latestTicket.date_modified || '-';
+  document.getElementById('popModifiedBy').innerHTML = latestTicket.modified_user
+  document.getElementById('popupResolution').innerText = latestTicket.resolution || '-';
+  document.getElementById('popupSeverity').innerText = latestTicket.severity || '-';
+  document.getElementById('popupCreatedName').innerText = latestTicket.created_by || '-';
+
+  // Handle attached documents
+  const documentsContainer = document.getElementById('popupDocuments');
+  documentsContainer.innerHTML = ''; // Clear previous documents
+
+  if (latestTicket.documents && latestTicket.documents.length > 0) {
+    const documentsList = document.createElement('ul');
+
+    latestTicket.documents.forEach((document) => {
+      const listItem = document.createElement('li');
+      listItem.innerText = document.name; 
+
+      // Create a link that opens in a new tab for preview
+      const previewLink = document.createElement('a');
+      previewLink.href = document.url; // Replace with the actual URL
+      previewLink.target = '_blank'; // Open in a new tab
+      previewLink.innerText = 'Preview';
+      listItem.appendChild(previewLink);
+
+      documentsList.appendChild(listItem);
+    });
+
+    documentsContainer.appendChild(documentsList);
+  }
+}
+
+  getToken();
+
+  // Call the getToken function to initiate the process
+</script>
+</html>
